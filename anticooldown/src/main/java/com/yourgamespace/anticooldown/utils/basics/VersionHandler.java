@@ -108,6 +108,57 @@ public class VersionHandler {
             case "1.17.1":
                 versionId = 29;
                 break;
+            case "1.18":
+                versionId = 30;
+                break;
+            case "1.18.1":
+                versionId = 31;
+                break;
+            case "1.18.2":
+                versionId = 32;
+                break;
+            case "1.19":
+                versionId = 33;
+                break;
+            case "1.19.1":
+                versionId = 34;
+                break;
+            case "1.19.2":
+                versionId = 35;
+                break;
+            case "1.19.3":
+                versionId = 36;
+                break;
+            case "1.19.4":
+                versionId = 37;
+                break;
+            case "1.20":
+                versionId = 38;
+                break;
+            case "1.20.1":
+                versionId = 39;
+                break;
+            case "1.20.2":
+                versionId = 39;
+                break;
+            case "1.20.3":
+                versionId = 40;
+                break;
+            case "1.20.4":
+                versionId = 41;
+                break;
+            case "1.20.5":
+                versionId = 42;
+                break;
+            case "1.20.6":
+                versionId = 43;
+                break;
+            case "1.22":
+                versionId = 44;
+                break;
+            case "1.21.1":
+                versionId = 45;
+                break;
             //Unsupported
             default:
                 versionId = -1;

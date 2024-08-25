@@ -25,7 +25,6 @@ import com.yourgamespace.anticooldown.utils.module.ModulePlaceholderHandler;
 import de.tubeof.tubetils.api.cache.CacheContainer;
 import de.tubeof.tubetils.api.updatechecker.UpdateChecker;
 import de.tubeof.tubetils.api.updatechecker.enums.ApiMethode;
-import de.tubeof.tubetilsmanager.TubeTilsManager;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.command.ConsoleCommandSender;
@@ -38,7 +37,6 @@ import java.io.IOException;
 public class AntiCooldown extends JavaPlugin {
 
     private static AntiCooldown main;
-    private static TubeTilsManager tubeTilsManager;
     private static CacheContainer cacheContainer;
     private static AntiCooldownLogger antiCooldownLogger;
     private static Data data;
@@ -60,7 +58,6 @@ public class AntiCooldown extends JavaPlugin {
         long startTimestamp = System.currentTimeMillis();
 
         initialisation();
-        if (!tubeTilsManager.wasSuccessful()) return;
 
         antiCooldownLogger.info("§aThe Plugin will be activated ...");
         antiCooldownLogger.info("==================================================");
@@ -68,7 +65,6 @@ public class AntiCooldown extends JavaPlugin {
         antiCooldownLogger.info("==================================================");
 
         manageConfigs();
-        checkUpdate();
 
         registerModules();
         registerCommands();
@@ -82,7 +78,6 @@ public class AntiCooldown extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        if (!tubeTilsManager.wasSuccessful()) return;
 
         antiCooldownLogger.info("§aThe Plugin will be deactivated ...");
 
@@ -95,7 +90,6 @@ public class AntiCooldown extends JavaPlugin {
     private void initialisation() {
         main = this;
 
-        tubeTilsManager = new TubeTilsManager("[AntiCooldownLogger] ", getInstance(), 71, true);
         cacheContainer = new CacheContainer("AntiCooldown");
         cacheContainer.registerCacheType(String.class);
         cacheContainer.registerCacheType(Boolean.class);
@@ -174,42 +168,6 @@ public class AntiCooldown extends JavaPlugin {
             new PlaceholderHandler().register();
 
             antiCooldownLogger.info("§aPlaceholders have been successfully registered!");
-        }
-    }
-
-    private void checkUpdate() {
-        if (!ObjectTransformer.getBoolean(cacheContainer.get(Boolean.class, "USE_UPDATE_CHECKER"))) {
-            antiCooldownLogger.info("§cCheck for updates disabled. The check will be skipped!");
-            return;
-        }
-
-        antiCooldownLogger.info("§aChecking for updates ...");
-        try {
-            updateChecker = new UpdateChecker("AntiCooldown-UpdateChecker", 51321, getInstance(), ApiMethode.YOURGAMESPACE, false, true);
-
-            // Check errors
-            if (!updateChecker.isOnline()) {
-                antiCooldownLogger.info("§cUpdate-Check failed: No connection to the internet could be established.");
-                return;
-            }
-            if (updateChecker.isRateLimited()) {
-                antiCooldownLogger.info("§cUpdate-Check failed: Request got blocked by rate limit!");
-                return;
-            }
-            if (!updateChecker.wasSuccessful()) {
-                antiCooldownLogger.info("§cUpdate-Check failed: An unknown error has occurred!");
-            }
-
-            // Final outdated check
-            if (updateChecker.isOutdated()) {
-                if (ObjectTransformer.getBoolean(cacheContainer.get(Boolean.class, "UPDATE_NOTIFY_CONSOLE"))) {
-                    antiCooldownLogger.info("§cAn update was found! (v" + updateChecker.getLatestVersion() + ") Download here: " + updateChecker.getDownloadUrl());
-                }
-            }
-        } catch (IOException exception) {
-            antiCooldownLogger.info("§cAn error occurred while checking for updates!");
-            antiCooldownLogger.info("§cPlease check the status page (https://yourgamespace.statuspage.io/) or contact our support (https://yourgamespace.com/support/).");
-            exception.printStackTrace();
         }
     }
 
